@@ -1,0 +1,821 @@
+\section{Second Order Linear Differential Equations}
+\subsection{Homogeneous Differential Equations with Constant Coefficients}
+Many second order ordinary differential equations have the form
+\[ \dv[2]{x}{t} = f\pqty{t, x, \dv{x}{t}} \]
+Linear second order differential equations can be written in the form
+\[ \dv[2]{x}{t} + p(t)\dv{x}{t} + q(t)x = g(t) \]
+or, equivalently,
+\[ P(t)y'' + Q(t)y' + R(t)y = G(t)\]
+These forms are easy to convert between as long as $P(t) \neq 0$ (if $P(t) = 0$, then it's just a first order linear equation). \par
+An initial condition for a second order differential equation is actually comprised of two conditions:
+\[ x(t_0) = x_0 \quad\quad x'(t_0) = x_0' \]
+where $x_0, x_0' \in \RR$ are constants. Notice that we need two constants to narrow down to a particular solution because we lose two segrees of information when differentiating a function twice. \par
+We call a second-order linear differential equation \bf{homogeneous} if the $g(t)$ term is zero for all $t$. Otherwise, it is \bf{nonhomogeneous}. $g(t)$ is sometimes also known as the \bf{forcing term} because in many applications it describes an externally applied force on a system. \par
+When discussing homogeneous equations, we will write them in the form
+\[ P(t)y'' + Q(t)y' + R(t)y = 0 \]
+Or, for homogeneous equations with constant coefficients (the subject of this section),
+\[ ay'' + by' + cy = 0 \]
+\begin{example}
+    Solve the equation 
+    \[ y'' - y = 0 \]
+    with the initial condition $y(0) = 2$, $y'(0) = -1$. \par
+    \bf{Solution:} If we rewrite this function as $y'' = y$, it can be interpreted as asking ``what function stays the same when it is differentiated twice?'' \par
+    You may recognize this function as $e^x$, since $\dv{x} e^x = e^x$. Additionally, $e^{-x}$ also satisfies the differential equation because the $-1$s will cancel from taking two derivatives. \par
+    In fact, any function of the form
+    \[y(x) = C_1e^x + C_2e^{-x} \]
+    will satisfy the differential equation. The initial conditions give us a system of two equations:
+    \begin{align*}
+        C_1 + C_2 &= 2\\
+        C_1 - C_2 &= -1
+    \end{align*} 
+    Add the first equation to the second equation to find
+    \[ 2C_1 = 1 \]
+    and $C_1 = 1/2$. Then, we can plug back into the first equation to get $C_2 = 3/2$. Therefore, our particular solution is
+    \[ y(x) = \frac{1}{2}e^x + \frac{3}{2}e^{-x}\]
+\end{example}
+Using this example, we can try and find a solution to the general equation
+\[ ay'' + by' + cy = 0 \]
+Suppose we have a solution of we form $y = e^{rt}$, where $r$ is a constant that we will define. Then, we get $y' = re^{rt}$ and $y'' = r^2e^{rt}$. The differential equation becomes
+\[ (ar^2 + br + c)e^{rt} = 0\]
+This is satisfied when $ar^2 + br + c = 0$ because $e^{rt}$ is never zero. The equation
+\[ ar^2 +br + c = 0\]
+is known as the \bf{characteristic equation} for the differential equation. It is significant because if a particular $r$ value satisfies the characteristic equation, then $y = e^{rt}$ satisfies the differential equation. By the quadratic formula, we obtain
+\[ r = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}\]
+Notice that depending on the sign of the discriminant $b^2-4ac$, we wither have two real, different values of $r$, one real repeated value of $r$, or two complex values of $r$. \par
+For the case where we have two real, distinct roots $r_1, r_2$, then we have $y_1(t) = e^{r_1t}$ and $y_2(t) = e^{r_2t}$. Recall that adding these two solutions gives us another solution, and in general we obtain
+\[ y(t) = c_1 e^{r_1t} + c_2 e^{r_2 t}\]
+With the initial condition $y(t_0) = y_0$ and $y'(t_0) = y_0'$, we get
+\begin{align*}
+    c_1e^{r_1t_0} + c_2e^{r_2t_0} &= y_0 \\
+    r_1c_1e^{r_1t_0} + r_2c_2e^{r_2t_0} &= y_0'
+\end{align*}
+Solving these two equations, we find
+\[ c_1 = \frac{y_0' - y_0r_2}{r_1 - r_2}e^{-r_1t_0} \quad c_2 = \frac{y_0r_1 - y_0'}{r_1-r_2}e^{-r_2t_0}\]
+Because $r_1\neq r_2$, these expressions are never undefined. That is, we are able to find a general solution for \it{any} initial condition.
+\begin{example}
+    Find the general solution to
+    \[ y'' + 5y' + 6y = 0\]
+    \bf{Solution:} We obtain the characteristic equation
+    \[ r^2 + 5r + 6 = 0\]
+    which can be factored into $(r+2)(r+3) = 0$, so we have $r_1 = -2$ and $r_2 = -3$, giving a general solution of
+    \[ y = c_1e^{-2t} + c_2e^{-3t} \]
+\end{example}
+Because the general form of a solution involves two exponential terms, the end behavior of the solutions can only be one a few thing. If both $r_1$ and $r_2$ is negative, $y$ approaches zero as $t\to\infty$. If either $r_1$ or $r_2$ is positive, on the other hand, then $y$ approaches $\infty$ or $-\infty$ (as long as the corresponding $c$ value is nonzero). If one of $r_1$ or $r_2$ is negative and the other is zero, then $y$ approaches a fixed value as $t\to\infty$. 
+\subsection{Solutions of Linear Homogeneous Equations; the Wronskian}
+Previously, we learned how to solve some differential equations of the form
+\[ ay'' + b' + cy = 0\]
+Now, we build on those results to build a better idea of the structure of the solutiosn to all second-order homogeneous equations. \par
+It will be useful to discuss \bf{differential operator} notation. Let $p$ and $q$ be continuous functions on an open interval $I\subseteq \RR$. Then, for any function $\varphi$ that is twice differentiable on $I$, we define the differential operator $L$ as
+\[ L[\varphi] = \varphi'' + p\varphi' + q\varphi \]
+It is important to understand that $L[\varphi]$ gives us another function, and to evaluate at it as a point $t\in I$, we do
+\[ L[\varphi](t) = \varphi''(t) + p(t)\varphi'(t) + q(t)\varphi(t) \]
+For instance, if $p(t) = t^2$, $q(t) = 1+t$, and $\varphi(t) = \sin(3t)$, we get
+\[ L[\varphi](t) = (\sin(3t))'' + t^2(\sin(3t))' + (1+t)(\sin(3t))\]
+$L$ is often written as $L = D^2 + pD + q$, where $D$ is the derivative operator--that is, $D[\varphi] = \varphi'$. \par
+Therefore, the general second order homogeneous linear differential equation 
+\[ y'' + p(t)y' + q(t)y = 0\] 
+can be written as
+\[ L[y](t) = 0\]
+The existence and uniqueness theorem tells us that for the initial value problem $L[y](t) = g(t)$ with $y(t_0) = y_0$ and $y'(t_0) = y_0'$, there exists exactly one solution $y=\varphi(t)$ on the open interval $I$ where $p$, $q$, and $g$ are continuous.
+\begin{example}
+    Find the longest interval in which the solution of the initial value problem
+    \[ (t^2-3t)y'' + ty' + (-t - 3)y = 0 \quad y(1) = 2 \quad y'(1) = 1 \]
+    is certain to exist. \par
+    \bf{Solution:} First, we can get the equation in the correct form:
+    \[ y'' + \frac{t}{t(t-3)}y' - \frac{t + 3}{t(t-3)}y = 0\]
+    The coefficient functions are continuous on $(-\infty, 0)\cup(0, 3)\cup(3, \infty)$. The initial value is on $(0,3)$, so that is the longest interval where the solution is guaranteed to exist.
+\end{example}
+Another important result is the principle of superposition.
+\begin{theorem}[Principle of Superposition]
+    If $y_1$ and $y_2$ satisfy the differential eqution $L[y] = 0$, then the linear combination $c_1y_1 + c_2y_2$ is also a solution. That is,
+    \[ L[c_1y_1 + c_2y_2] = 0 \]
+\end{theorem}
+This follows from the fact that the differential operator is linear (the reader should verify this), giving us
+\[ L[c_1y_1 + c_2y_2] = c_1L[y_1] + c_2L[y_2] \]
+Because $L[y_1] = L[y_2] = 0$, then $c_1L[y_1] + c_2L[y_2] = 0$ as well. \par
+The next question we should answer is whether or not every unique solution $y$ satisfying $L[y] = 0$ with a given initial condition can be represented as $y(t) = c_1y_1(t) + c_2y_2(t)$. \par
+Suppose we have an initial condition $y(t_0) = y_0'$, $y'(t_0) = y_0'$. Then, we get a system of equations
+\begin{align*}
+    c_1y_1(t_0) + c_2y_2(t_0) &= y_0 \\
+    c_1y_1'(t_0) + c_2y_2'(t_0) &= y_0' 
+\end{align*} 
+This system can be written in matrix form as
+\[ \begin{bmatrix}
+    y_1(t_0) & y_2(t_0) \\
+    y_1'(t_0) & y_2'(t_0)
+\end{bmatrix}\begin{bmatrix}
+    c_1 \\ c_2
+\end{bmatrix} = \begin{bmatrix}
+    y_0 \\ y_0'
+\end{bmatrix}\]
+And has unique $c_1$, $c_2$ satisfying it as long as 
+\[ \begin{vmatrix}
+    y_1(t_0) & y_2(t_0) \\
+    y_1'(t_0) & y_2'(t_0)
+\end{vmatrix} = y_1(t_0)y_2'(t_0) - y_2(t_0)y_1'(t_0) \neq 0 \]
+We give the determinant of this matrix a name--the \bf{Wronskian}--and indicate it with $W$. Recall from linear algebra that we can write
+\begin{align*}
+    \begin{bmatrix}
+        c_1 \\ c_2 
+    \end{bmatrix} &= \begin{bmatrix}
+        y_1(t_0) & y_2(t_0) \\
+        y_1'(t_0) & y_2'(t_0)
+    \end{bmatrix}^{-1} \begin{bmatrix}
+        y_0 \\ y_0'
+    \end{bmatrix} \\
+    &= \frac{1}{W} \begin{bmatrix}
+        y_2'(t_0) & -y_2(t_0) \\
+        -y_1'(t_0) & y_1(t_0)
+    \end{bmatrix}\begin{bmatrix}
+        y_0 \\ y_0'
+    \end{bmatrix} \\
+    &= \frac{1}{W} \begin{bmatrix}
+        y_2'(t_0)y_0 - y_2(t_0)y_0' \\
+        y_1(t_0)y_0' - y_1'(t_0)y_0
+    \end{bmatrix}
+\end{align*}
+With these values of $c_1, c_2$, the linear combination $y = c_1y_1(t) + c_2y_2(t)$ satisfies $L[c_1y_1(t) + c_2y_2(t)] = 0$ and the initial condition. \par
+If $W=0$, then there is no unique solution to the system of equations and in fact no solution as long as the numerators given by $y_2'(t_0)y_0 - y_2(t_0)y_0'$ and $y_1(t_0)y_0' - y_1'(t_0)y_0$ are nonzero. Thus, if $W=0$, there are many initial conditions that cannot be satisfied by an equation of the form $c_1y_1(t) + c_2y_2(t)$. \par
+One thing we can notice about the Wronskian is that it is only uniformly zero if $y_1$ and $y_2$ are linearly dependent--that is, we can write $y_2 = ky_1$ for some constant $k$. Plugging this into the Wronskian, we get
+\[ W =
+    \begin{vmatrix}
+        y_1(t_0) & ky_1(t_0) \\
+        y_1'(t_0) & ky_1'(t_0)
+    \end{vmatrix} = ky_1(t_0)y_1'(t_0) - ky_1(t_0)y_1'(t_0) = 0
+\]
+Proving the other direction (if $W=0$, $y_1$ and $y_2$ are linearly dependent) is a bit more tricky, so we will skip it here. 
+\begin{example}
+    Previously, we found that $y_1 = e^{-2t}$ and $y_2 = e^{-3t}$ are solutions of the differential equation
+    \[ y'' + 5y' + 5y = 0 \]
+    Find the Wronskian of $y_1$ and $y_2$. \par
+    \bf{Solution:} The Wronskian is
+    \[ W[y_1, y_2] = \begin{vmatrix}
+        e^{-2t} & e^{-3t} \\
+        -2e^{-2t} & -3e^{-3t}
+    \end{vmatrix} = -e^{-5t}\]
+    Because this is never zero, we are able to construct solutions to any initial condition with an equation of the form
+    \[ y = c_1y_1 + c_2y_2 \]
+\end{example}
+\begin{theorem}
+    Suppose that $y_1$ and $y_2$ are two solutions of the second order linear differential equation
+    \[ L[y] = 0 \]
+    Then the two-parameter family of solutions
+    \[ y = c_1y_1(t) + c_2y_2(t) \]
+    includes every solution of the differential equation if and only if there is at least one point $t_0$ where $W[y_1, y_2](t_0) \neq 0$.
+\end{theorem}
+To show this, let $\varphi$ satisfy the differential equation--that is, $L[\varphi] = 0$. We wish to determine whether there exists values $c_1$, $c_2$ such that
+\[ c_1y_1 + c_2y_2 = \varphi \]
+Let $t_0$ be a point where the Wronskian of $y_1$ and $y_2$ is nonzero.  Then, evaluate $\varphi$ and $\varphi'$ at this point and let $\varphi(t_0) = y_0$, $\varphi'(t_0) = y_0'$. \par
+Now, we know that $\varphi$ is a solution to the initial value problem $L[y] = 0$, $y(t_0) = y_0$, $y'(t_0)=y_0'$. We also know that since the Wronskian of $y_1$ and $y_2$ is nonzero at $t_0$. We can thus write $\varphi$ as a linear combination of $y_1$ and $y_2$,
+\[ \varphi = c_1y_1 + c_2y_2 \]
+Since $\varphi$ is an \it{arbitrary} solution, it follows that every solution of this equation is included in the family of linear combinations of $y_1$ and $y_2$. \par
+Now, suppose that there is no $t_0$ where $W[y_1, y_2](t_0) \neq 0$. Then, we can pick some value of $y_0$ and $y_0'$ such that no values of $c_1$ and $c_2$ satisfy the initial value problem. However, by the existence and uniquenss theorem, we are still able to find a $\varphi$ that satisfies the problem, showing that not all solutions can be written as $c_1y_1 + c_2y_2$. \par
+Based on this, it is natural to call the expression
+\[ y = c_1y_1(t) + c_2y_2(t) \]
+the \bf{general solution} of $L[y] = 0$. The solutions $y_1$ and $y_2$ are said to form a \bf{fundamental set of solutions} if and only if their Wronskian is nonzero. 
+\begin{example}
+    Show that if $y_1(t) = e^{r_1t}$ and $y_2(t) = e^{r_2t}$ are two solutions to a differential equation $ay''+by'+cy=0$, then $y_1$ and $y_2$ form a fundamental set of solutions as long as $r_1\neq r_2$. \par
+    \bf{Solution:} Calculate the Wronskian:
+    \[ W[y_1, y_2] = \begin{vmatrix}
+        e^{r_1t} & e^{r_2t} \\
+        r_1e^{r_1t} & r_2e^{r_2t}
+    \end{vmatrix} = (r_2-r_1)e^{(r_1+r_2)t}\]
+    which is nonzero for all $t\in\RR$ if $r_2\neq r_1$, showing that $y_1$ and $y_2$ form a set of fundamental solutions.
+\end{example}
+\begin{example}
+    Show that $y_1(t) = \sqrt{t}$ and $y_2(t) = 1/t$ form a fundamental set of solutions for the differential equation
+    \[ 2t^2y'' + 3ty' - y = 0 \]
+    with $t > 0$. \par
+    \bf{Solution:} First, verify that $y_1$ and $y_2$ solve the differential equation:
+    \begin{align*}
+        2t^2 y_1'' + 3ty_1' - y_1 &= 2t^2 \pqty{-\frac{1}{4}t^{-3/2}} + 3t \pqty{ \frac{1}{2}t^{-1/2}} - t^{1/2} \\
+        &= \pqty{-\frac{1}{2} + \frac{3}{2} - 1}t^{1/2} = 0
+    \end{align*}
+    and for $y_2$:
+    \begin{align*}
+        2t^2 y_2'' + 3ty_2' - y_2 &= 2t^2 \pqty{2t^{-3}} + 3t \pqty{-t^{-2}} - t^{-1} \\
+        &= \pqty{2 + 3 - 1}t^{-1} = 0
+    \end{align*}
+    So they are both solutions. Now, verify that $W[y_1, y_2]\neq 0$. 
+    \begin{align*}
+        W[y_1, y_2] &= \begin{vmatrix}
+            t^{1/2} & t^{-1} \\
+            \frac{1}{2}t^{-1/2} & -t^{-2}
+        \end{vmatrix} = \frac{3}{2}t^{-3/2} \neq 0
+    \end{align*}
+    Therefore, $y_1$ and $y_2$ form a fundamental set of solutions and the general solution of the differential equation is 
+    \[ y(t) = c_1t^{1/2} + c_2t^{-1}\]
+    for $t>0$.
+\end{example}
+In several examples we have been able to find a fundamental set of solutions, and thus a general solution, to a differential equation. However, this task can sometimes be quite difficult, leading to the question of whether or not a given differential equation is guaranteed to have a fundamental set of solutions. 
+\begin{theorem}
+    Consider the differential equation
+    \[ L[y] = 0\]
+    whose coefficients $p$ and $q$ are continuous on some open interval $I$. Choose some point $t_0\in I$. \par
+    Let $y_1$ be the unique solution of the differential equation that satisfies 
+    \[ y_1(t_0) = 1 \quad y_1'(t_0) = 0 \]
+    and let $y_2$ be the unique solution of the differential equation that satisfies
+    \[ y_2(t_0) = 0 \quad y_2'(t_0) = 1 \]
+    Where the existence of such a $y_1$ and $y_2$ is guaranteed by the existence and uniqueness theorem. \par
+    Then, $y_1$ and $y_2$ form a fundamental set of solutions for $L[y] = 0$. 
+\end{theorem}
+To verify that $y_1$ and $y_2$ form a fundamental set, compute the Wronskian.
+\[ W[y_1, y_2](t_0) = \begin{vmatrix}
+    1 & 0 \\
+    0 & 1
+\end{vmatrix} = 1\neq 0\]
+Recall that to guarantee a fundamental set of solutions, the Wronskian must be nonzero at at least one point on the interval. Since we have found such a point, $y_1$ and $y_2$ form a fundamental set.
+\begin{example}
+    Find the fundamental set of solutions $y_1$ and $y_2$ that satisfy
+    \[ y_1(0) = 1 \quad \quad y_1'(0) = 0\]
+    \[ y_2(0) = 0 \quad \quad y_2'(0) = 0\]
+    for the differential equation
+    \[ y'' - y = 0 \]
+    Recall that we previously found two solutions of this differential equation to be $\varphi_1(t) = e^t$ and $\varphi_2(t) = e^{-t}$. The Wronskian of these solutions is $W[\varphi_1, \varphi_2] = -2 \neq 0$, so they form a fundamental set. However, they do not satisfy the required iniital conditions. To construct a fundamental set that does follow the initial conditions, we will use the general solution formed by $\varphi_1$ and $\varphi_2$, and create two new functions from there. \par
+    The general solution is
+    \[ y = c_1 e^t + c_2 e^{-t} \]
+    which gives us
+    \[ y' = c_1e^t - c_2e^{-t} \]
+    combining these two equations, we find that 
+    \[ y_1(t) = \frac{1}{2}e^t + \frac{1}{2}e^{-t} \]
+    satisfies $y_1(0) = 1$ and $y_1'(0) = 0$. We also find that
+    \[ y_2(t) = \frac{1}{2}e^t - \frac{1}{2}e^{-t} \]
+    satisfies $y_2(0) = 0$ and $y_2'(0) = 1$. Also notice that we can rewrite $y_1$ and $y_2$ using hyperbolic trig to obtain
+    \[ y_1(t) = \cosh(t) \quad \quad y_2(t) = \sinh(t)\]
+    The Wronskian of $y_1$ and $y_2$ is 
+    \[ W[y_1, y_2](t) = \cosh^2t - \sinh^2t = 1\]
+    Because this is nonzero, $y_1$ and $y_2$ form a fundamental set, and they follow the requirements of the initial condition. Therefore, another general solution to the differential equation is
+    \[ y(t) = c_1\cosh(t) + c_2\sinh(t)\]
+\end{example}
+One important result of the previous example is the idea that there are many different fundamental sets for any given differential equation--in fact, there will be infinitely many. \par
+Another important theorem follows.
+\begin{theorem} \label{imrealpart}
+    Consider the second order linear differential equation
+    \[ L[y] = 0 \]
+    where the coefficient functions $p$ and $q$ are continuous and real-valued. If $y = u(t) + iv(t)$ is a complex-valued solution to $L[y] = 0$, then $u(t)$ and $v(t)$ are also solutions.
+\end{theorem}
+\begin{proof}
+    Substituting $u(t) + iv(t)$ for $y$ in the differential equation, we get
+    \begin{align*}
+        (u''(t) + iv''(t)) + p(t)(u'(t) + iv'(t)) + q(t)(u(t) + iv(t)) &= 0
+    \end{align*}
+    We can separate this into its real and imaginary parts to find
+    \[ (u''(t) + p(t)u'(t) + q(t)u(t)) + i(v''(t) + p(t)v'(t) + q(t)v(t)) = 0\]
+    and, noticing that a complex variable is zero if and only if both its real and imaginary parts are zero, we get
+    \[ u''(t) + p(t)u'(t) + q(t)u(t) = L[u] = 0\]
+    \[ v''(t) + p(t)v'(t) + q(t)v(t) = L[v] = 0\]
+    Showing that both $u$ and $v$ are solutions.
+\end{proof}
+Additionally, if $y = u(t) + iv(t)$ is a solution to $L[y] = 0$, then its complex conjugate $\overline y = u(t) - iv(t)$ is also a solution. This comes from the fact that $\overline y$ is also a linear combination of two solutions with
+\[ \overline y(t) = -y(t) + 2u(t)\]
+Another important result is that there is in fact a simple explicit formula for the Wronskian of two solutions to a second order homogeneous equation.
+\begin{theorem}[Abel's Theorem]
+    If $y_1$ and $y_2$ are solutions to the differential equation
+    \[ L[y] = y'' + p(t)y' + q(t)y = 0\]
+    where $p$ and $q$ are continuous on an open interval $I$, then the Wronskian $W[y_1, y_2](t)$ is given by
+    \[ W[y_1, y_2](t) = c\exp \pqty{-\int p(t)\dd t}\]
+    where $c$ is a constant that depends on $y_1$ and $y_2$, but not $t$. Further, if $W[y_1, y_2](t)$ is zero at \it{any} point on $I$, then it must be zero for all points on $I$, since a zero Wronskian would require $c=0$.
+\end{theorem}
+\begin{proof}
+    First, note that both $y_1$ and $y_2$ satisfy
+    \[ y_1'' + p(t)y_1' + q(t)y_1 = 0 \]
+    \[ y_2'' + p(t)y_2' + q(t)y_2 = 0 \]
+    Multiplying the first equation by $-y_2$ and the second by $y_1$ and adding the result, we get
+    \begin{equation}
+        \label{wronskiandiffeq} (y_1y_2'' - y_2y_1'') + p(t)(y_1y_2' - y_2y_1') = 0
+    \end{equation}
+    Recall that $W[y_1, y_2](t) = y_1y_2' - y_2y_1'$, so we find
+    \[ W[y_1, y_2]'(t) = (y_1'y_2' + y_1y_2'') - (y_2'y_1' + y_2y_1'') =  y_1y_2'' - y_2y_1''\]
+    Substituting this into Equation \ref{wronskiandiffeq}, we get
+    \[ W' + p(t)W = 0\]
+    This is a separable differential equation for $W$ with a solution of
+    \[ W(t) = c\exp(-\int p(t)\dd t)\]
+    where $c$ is a constant. The value of $c$ depends on the pair of equations $y_1$ and $y_2$. 
+\end{proof}
+When we work with Abel's formula, it is usually sufficient to know whether or not $c=0$, since this is what determines whether or not $y_1$ and $y_2$ are dependent. To find this, we can evaluate $W[y_1, y_2]$ at any $t$ value which we find convenient to work with. If $W$ is zero there, it is zero everywhere. If it is not, then $W$ is never zero.
+\begin{example}
+    Earlier, we found that $y_1 = t^{1/2}$ and $y_2 = t^{-1}$ are solutions to
+    \[ 2t^2y'' + 3ty' - y  = 0 \]
+    with $t>0$. Verify that the Wronskian of $y_1$ and $y_2$ is given by Abel's formula. \par
+    \bf{Solution:}  We previously found that 
+    \[ W[y_1, y_2] = \frac{3}{2}t^{-3/2} \]
+    Now, we can use Abel's formula and see if it matches up. Putting the differential equation in standard form, we find
+    \[ y'' + \frac{3}{2t} y' - \frac{1}{2t^2}y = 0 \]
+    this means that $p(t) = 3/(2t)$, and the Wronsian is given by
+    \begin{align*}
+        W[y_1, y_2] &= c \exp\pqty{\int -\frac{3}{2t}\dd t} \\
+        &= c\exp \pqty{-\frac{3}{2}\ln\abs{t}} \\
+        &= c\exp \pqty{\ln (t^{-3/2})} = ct^{-3/2}
+    \end{align*}
+    Where the absolute value bars go away because $t>0$. \par
+    This matches with the previous version of $W[y_1, y_2]$ that we found with $c = -3/2$.
+\end{example}
+\subsection{Complex Roots of the Characteristic Equation}
+In this section we will return to our discussion of the second order linear homogeneous equation with constant real-valued coefficients given by
+\[ ay'' + by' + cy = 0 \]
+Recall that we previously showed that if the characteristic equation
+\[ ar^2 + br + c = 0 \]
+has two distinct real roots $r_1$ and $r_2$, then the general solution is
+\[ y(t) = c_1 e^{r_1t} + c_2 e^{r_2 t} \]
+Now, suppose the the discriminant $b^2-4ac$ is negative. Then, the roots are complex, and are given by
+\[ r_1, r_2 = -\frac{b}{2a} \pm \frac{\sqrt{4ac-b^2}}{2a} i \]
+we will abbreviate this as
+\[ r_1 = \lambda + i\mu \quad \quad r_2 = \lambda - i\mu \]
+The corresponding equations for $y_1$ and $y_2$ are
+\[ y_1(t) = c_1 e^{(\lambda + i\mu)t} \]
+and
+\[ y_2(t) = c_2 e^{(\lambda - i\mu)t} \]
+We hope to split these equations into a real and imaginary part, and then use Theorem \ref{imrealpart} to find two real-valued solutions. We will do this via \bf{Euler's Formula}. Euler's formula can be found by analyzing the power series of the exponential and trigonometric functions, but that is more suited for a Calculus text. So we will just present the formula here and not justify it. \par
+Euler's formula states
+\[ e^{it} = \cos t + i \sin t \]
+Using the fact that $\cos t$ is an even function and $\sin t$ is an odd function, we come up with the complementary equation
+\[ e^{-it} = \cos t - i \sin t \]
+From this, we can write
+\begin{align*} e^{\lambda t + i\mu t} &= e^{\lambda t}e^{i\mu t} \\
+&= e^{\lambda t}\pqty{\cos (\mu t) + i\sin(\mu t)}
+\end{align*}
+With a similar process, we also find 
+\[ e^{\lambda t - i\mu t} = e^{\lambda t}\pqty{\cos \mu t - i\sin(\mu t)} \]
+Then, our general solution can be written as
+\begin{align*}
+    c_1y_1(t) + c_2y_2(t) &= c_1e^{\lambda t}\pqty{\cos (\mu t) + i\sin(\mu t)} + c_2e^{\lambda t}\pqty{\cos (\mu t) - i\sin(\mu t)} \\
+    &= e^{\lambda t}\pqty{(c_1+c_2)\cos(\mu t) + (c_1 - c_2)i\sin(\mu t)} 
+\end{align*}
+By redefining our constants as $k_1 = c_1 + c_2$ and $k_2 = c_1 - c_2$, we get
+\begin{align*}
+    c_1y_1(t) + c_2y_2(t) = k_1e^{\lambda t}\cos (\mu t) + k_2 e^{\lambda t}\sin(\mu t)
+\end{align*}
+And with $v_1(t) = e^{\lambda t}\cos (\mu t)$ and $v_2(t) = e^{\lambda t}\sin (\mu t)$, we find
+\[ c_1y_1(t) + c_2y_2(t) = k_1v_1(t) + k_2iv_2(t) \]
+By Theorem \ref{imrealpart}, both $v_1$ and $v_2$ are also solutions to the differential equation. Now, we can compute $W[v_1, v_2]$ and find
+\begin{align*}
+    W[v_1, v_2](t) &= \begin{vmatrix}
+    e^{\lambda t}\cos (\mu t) & e^{\lambda t}\sin (\mu t) \\
+    -\mu e^{\lambda t}\sin(\mu t) + \lambda e^{\lambda t}\cos(\mu t) & \mu e^{\lambda t}\cos(\mu t) + \lambda e^{\lambda t}\sin(\mu t) \end{vmatrix} \\
+    &= \mu e^{2\lambda t}\cos^2(\mu t) + \lambda e^{2\lambda t}\sin(\mu t)\cos(\mu t) + \mu e^{2\lambda t}\sin^2(\mu t) - \lambda e^{2\lambda t}\sin(\mu t)\cos(\mu t) \\
+    &= \mu e^{2\lambda t}
+\end{align*}
+Which is nonzero as long as $\mu \neq 0$. Therefore, $v_1$ and $v_2$ form a fundamental set of solutions as long as $b^2-4ac \neq 0$, which is always true by our initial assumption. \par 
+Therefore, the general solution to the second order linear homogeneous differential equation with constant coefficients 
+\[ ay'' + by' + cy = 0\]
+is given by 
+\[ y(t) = c_1 e^{\lambda t}\cos(\mu t) + c_2e^{\lambda t}\sin(\mu t) \]
+where $\lambda = -b/(2a)$, $\mu = \sqrt{4ac-b^2}/(2a)$ and $c_1$, $c_2$ are real-valued constants.
+\begin{example}
+    Find the solutio nof the initial value problem
+    \[ 16y'' - 8y' + 145y = 0 \]
+    with $y(0) = -2$ and $y'(0)=1$. \par
+    \bf{Solution:} The characteristic equation is $16r^2-8r+145 = 0$, and its roots are
+    \[ r = \frac{8}{32} \pm \frac{\sqrt{4(145)(16)-64}}{32} = \frac{1}{4} \pm 3i \]
+    This gives us a general solution of
+    \[ y(t) = c_1e^{t/4}\cos(3t) + c_2e^{t/4}\sin(3t) \]
+    with the initial condition $y(0)=-2$, we get
+    \[ y(0) = -2 = c_1 \]
+    and with $y'(0)=1$, we get
+    \[ y'(0) = 1 = 3c_2 \implies c_2 = \frac{1}{3}\]
+    so the solution to the initial value problem is
+    \[ y(t) = -2e^{t/4}\cos(3t) + \frac{1}{3}e^{t/4}\sin(3t) \]
+    We can observe that this solution will be an oscillation with an increasing magnitude (due to the exponential term). This is one of the three forms of solutions the second order linear homogeneous differential equation with constant coefficients.
+\end{example}
+\begin{example}
+    Give a general solution to the differential equation governing spring movement in the absence of friction or energy losses
+    \[ mx'' = -kx \]
+    \bf{Solution:} The equation can also be written as
+    \[ mx'' + kx = 0\]
+    which has characteristic equation $mr^2 + k = 0$, with roots $0 \pm i\sqrt{k/m}$. Thus, the general solution is
+    \[ x(t) = c_1\cos\pqty{\sqrt{\frac{k}{m}}t} + c_2\sin \pqty{\sqrt{\frac{k}{m}}t}\]
+    This solves the problem, but we can continue our analysis of this situation further. \par
+    Commonly, we define the quantity $\sqrt{k/m}$ as the \bf{angular frequency} of the spring-mass oscillator and denote it with $\omega$, giving us
+    \[ x(t) = c_1\cos(\omega t) + c_2\sin(\omega t)\]
+    using the initial condition $x(0) = x_0$ and $x'(0) = v_0$, we get a particular solution of
+    \[ x(t) = x_0\cos(\omega t) + \frac{v_0}{\omega}\sin(\omega t)\]
+    We call the global maximum of $x(t)$ the \bf{amplitude} of the spring oscillator. We can find when this maximum occurs by setting $x'(t)=0$, or
+    \[ -x_0\omega \sin (\omega t) + v_0\cos(\omega t) = 0\]
+    we can divide both sides by $\cos(\omega t)$. Note that this limits the domain we can look at to $[0, \pi /(2\omega))$ since $\cos(\omega t)$ is zero after this interval. 
+    \[ v_0 = x_0\omega \tan(\omega t) \]
+    which is solved by
+    \[ t_{\text{max}} = \frac{1}{\omega}\tan^{-1}\pqty{\frac{v_0}{x_0\omega}}\]
+    giving us
+    \[ A = x(t_{\text{max}}) = x_0\cos(\tan^{-1}(v_0/(x_0\omega))) + \frac{v_0}{\omega}\sin(\tan^{-1}(v_0/(x_0\omega)))\]
+    with trigonometric properties, we can show that 
+    \[ \cos(\tan^{-1}(v_0/(x_0\omega))) = \frac{x_0\omega}{\sqrt{v_0^2+x_0^2\omega^2}}\]
+    and that
+    \[  \sin(\tan^{-1}(v_0/(x_0\omega))) = \frac{v_0}{\sqrt{v_0^2+x_0^2\omega^2}}\]
+    meaning that
+    \[ A = \frac{x_0^2\omega^2+ v_0^2}{\omega\sqrt{v_0^2+x_0^2\omega^2}}\]
+    it can be shown that $x(t)$ can be rewritten as
+    \[ x(t) = A\cos(\omega t + \varphi )\]
+    where $\varphi$ is a constant known as the \bf{phase angle} of the oscillation that depents on the initial position and velocity.\par 
+    This formula is likely the one you learned in introductory physics.
+\end{example}
+\subsection{Repeated Roots of the Characteristic Equation}
+Now, we will explore the case for when the characteristic equation of the differential equation
+\begin{equation} \label{diffeqreproot}
+    ay'' + by' + cy = 0
+\end{equation}
+satisfies $b^2 - 4ac = 0$. This means that the characteristic equation has two roots given by
+\[ r_1 = r_2 = -\frac{b}{2a} \]
+The difficulty here is immediately clear, as if we attempt to find a solution in the form $e^{rt}$, both $r_1$ and $r_2$ yield the same result. \par
+So we will define $y_1(t) = e^{rt}$ and begin our search for a second independent solution $y_2(t)$. To do this, we will search for a solution of the form
+\begin{equation} \label{y2repeatedroot}
+    y_2(t) = v(t)y_1(t) = v(t)e^{rt}
+\end{equation}
+where $v(t)$ is a function that is yet to be determined. Differentiating Equation \ref{y2repeatedroot} twice yields
+\[ y_2'(t) = v'(t)e^{rt} +rv(t)e^{rt} = e^{rt}\pqty{v'(t) + rv(t)}\]
+and 
+\[ y_2''(t) = v''(t)e^{rt} + 2rv'(t)e^{rt} + r^2v(t)e^{rt} = e^{rt}\pqty{v''(t) + 2rv'(t) + r^2v(t)} \]
+substituting these back into Equation \ref{diffeqreproot}, we find
+\begin{align*}
+    0 &= ae^{rt}\pqty{v'' + 2rv' + r^2v} + be^{rt}\pqty{v' + rv} + ce^{rt}v \\
+    &= e^{rt}\pqty{av'' + (b + 2ar)v' + (ar^2 + br + c)v} \\
+    &= av'' + (b + 2ar)v' + (ar^2 + br + c)v
+    \intertext{Plugging in $-b/(2a)$ for $r$, we get}
+    0 &= av'' + \pqty{b+2a\frac{-b}{2a}}v' + \pqty{-a\frac{b^2}{4a^2} + b\frac{-b}{2a} + c}v \\
+    &= av'' + 0v' + \pqty{\frac{-b^2+4ac}{4a}}v
+\end{align*}
+But because $b^2-4ac = 0$, we simply get $av'' = 0$, or
+\[ v'' = 0 \]
+this implies that
+\[ v(t) = c_1t + c_2 \]
+hence, we have
+\[ y_2(t) = c_1e^{rt} + c_2te^{rt} \]
+but the $c_1e^{rt}$ term is already included in $y_1$ and the constant will come later from the linear combination of $y_1$ and $y_2$, so we will just say 
+\[ y_2 = te^{rt} \]
+Then, we can verify that $y_1$ and $y_2$ are independent.
+\begin{align*}
+    W[y_1, y_2](t) &= \begin{vmatrix}
+        y_1 & y_2 \\
+        y_1' & y_2'
+    \end{vmatrix} \\
+    &= \begin{vmatrix}
+        e^{rt} & te^{rt} \\
+        re^{rt} & e^{rt} + rte^{rt}
+    \end{vmatrix} \\
+    &= e^{2rt} + rte^{2rt} - rte^{2rt} = e^{2rt} \neq 0
+\end{align*}
+So $y_1$ and $y_2$ are independent and the general solution is given by
+\[ y(t) = c_1e^{rt} + c_2te^{rt} \]
+\subsubsection{General Solutions of Any Second Order Linear Homogeneous Equation with Constant Coefficients}
+In summary of the last few sections, we have found that for the differential equation
+\[ ay'' + by' + cy = 0\]
+The solutions are determined by the roots of the characteristic equation 
+\[ ar^2 + br + c = 0 \]
+There are three cases.
+\begin{enumerate}
+    \item If there are two distinct real roots $r_1$, $r_2$, the general solution is $y(t) = c_1e^{r_1t} + c_2e^{r_2 t}$
+    \item If there are two distinct complex roots $\alpha \pm \beta i$, the general solution is $y(t) = c_1e^{\alpha t}\cos(\beta t) + c_2e^{\alpha t}\sin(\beta t)$
+    \item If there is one repeated real root $r$, the general solution is $y(t) = c_1e^{rt} + c_2te^{rt}$.
+\end{enumerate}
+\subsection{Reduction of Order}
+It is worth noting that the prodedure we used to solve homogeneous second order differential equations with constant coefficients that have a characteristic equation with one repeated real root is also more generally applicable. \par
+If we have one nontrivial solution $y_1$ to the differential equation
+\[ y'' + p(t)y' + q(t)y = 0\]
+we can find find a second solution by letting $y = v(t)y_1(t)$. We can differentiate this twice to obtain
+\[ y'(t) = v'(t)y_1(t) + v(t)y_1'(t)\]
+and
+\[ y''(t) = v''(t)y_1(t) + 2v'(t)y_1'(t) + v(t)y_1''(t) \]
+which can be substituted into the original differential equation to obrain
+\begin{align*}
+    y_1v'' + (2y_1' + py_1)v' + (y_1'' + py_1' + qy_1)v = 0
+\end{align*}
+because $y_1'' + py_1' + qy_1 = 0$, this simplifies nicely to
+\[ y_1v'' + (2y_1' + py_1)v' = 0\]
+which, with the substitution $u = v'$, becomes a first order separable equation which can be solved. \par
+This procedure is called \bf{reduction of order}, because we turn the differential equation from a second order equation for $v$ to a first order equation for $u$. 
+\begin{example}
+    Given that $y_1(t) = 1/t$ is a solution to
+    \[ 2t^2 y'' + 3ty' - y = 0 \]
+    We set $y = vt^{-1}$, and then
+    \[ y' = v't^{-1} - vt^{-2} \quad \quad y'' = v''t^{-1} - 2v't^{-2} + 2vt^{-3} \]
+    which gives us
+    \begin{align*}
+        2t^2 \pqty{v''t^{-1} - 2v't^{-2} + 2vt^{-3}} &+ 3t\pqty{v't^{-1} - vt^{-2}} - vt^{-1} \\
+        &= 2v''t - 4v' + 2vt^{-1} + 3v' - 3vt^{-1} - vt^{-1} \\
+        &= 2v''t - v'
+    \end{align*}
+    Which, with the substitution $u=v'$, we get
+    \[ 2t\dv{u}{t} = u\]
+    which is solved by
+    \[ u(t) = c\sqrt{t}\]
+    which we can integrate to find
+    \[ v(t) = \frac{2}{3}ct^{3/2}+k \]
+    It follows that
+    \[ y = v(t)t^{-1} = \frac{2}{3}ct^{1/2}+kt^{-1} \]
+    We can drop the $kt^{-1}$ term because it is a constant multiple of $y_1$, and also drop the constants. This provides us with a new solution in the form $y_2 = t^{1/2}$, which we can verify is independent from $t^{-1}$ with the Wronskian.
+    \begin{align*}
+        W[y_1, y_2](t) &= \begin{vmatrix}
+            t^{-1} & t^{1/2} \\
+            -t^{-2} & (1/2)t^{-1/2}
+        \end{vmatrix} = \frac{3}{2}t^{-3/2 } \neq 0
+    \end{align*} 
+\end{example}
+\subsection{Nonhomogeneous Equations and the Method of Undetermined Coefficients}
+We will now turn our attention to the nonhomogeneous second order linear differential equation
+\begin{equation} \label{2ndordernonhomogeneous}
+    L[y] = y'' + p(t)y' + q(t)y = g(t)
+\end{equation}
+where $p$, $q$, and $g$ are continuous on an open interval $I$. The equation
+\[ L[y] = y'' + p(t)y' + q(t)y = 0 \]
+is called the homogeneous equation corresponding to Equation \ref{2ndordernonhomogeneous}. The solutions to these two equations are closely linked, and vary depending only on what $g(t)$ is. Therefore, we call $g$ the \bf{forcing term}.
+\begin{theorem} \label{diffofsolns}
+    If $Y_1$ and $Y_2$ are two solutions of Equation \ref{2ndordernonhomogeneous}, then their difference $Y_1 - Y_2$ is a solution to the homogeneous equation corresponding to (\ref{2ndordernonhomogeneous}). If, in addition, $y_1$ and $y_2$ form a fundamental set of solutions to the corresponding equation, then
+    \[ Y_1(t) - Y_2(t) = c_1y_1(t) + c_2y_2(t) \]
+    for some $c_1, c_2\in\RR$.
+\end{theorem}
+\begin{proof}
+    To show this, note that
+    \[ L[Y_1](t) = L[Y_2](t) \]
+    then, by the linearity of the differential operator,
+    \[ L[Y_1](t) - L[Y_2](t) = L[Y_1 - Y_2] = 0 \]
+    Because all soutions can be expressed as a linear combination of a fundamental set of solutions, it follows that the solution $Y_1 - Y_2$ can be written as such as well.
+\end{proof}
+\begin{theorem}
+    The general solution of the nonhomogeneous equation (\ref{2ndordernonhomogeneous}) can be written in the form
+    \[ \varphi(t) = c_1y_1(t) + c_2y_2(t) + Y(t) \]
+    where $y_1$ and $y_2$ form a fundamental set of solutions of the corresponding homogeneous equation and $Y$ is any solution of the nonhomogeneous equation. 
+\end{theorem}
+\begin{proof}
+    By Theorem \ref{diffofsolns}, we can express the difference $\varphi(t) - Y(t)$ as
+    \[ \varphi(t) - Y(t) = c_1y_1(t) + c_2y_2(t)\]
+    which can be rearranged to express the theorem. It is natural to call $\varphi$ the general solution because all possible solutions can be represented with it by choosing particular values of $c_1$ and $c_2$. 
+\end{proof}
+The general solution $c_1y_1(t) + c_2y_2(t)$ of the corresponding nonhomogeneous equation is sometimes called the \bf{complementary solution}, and is sometimes written as $y_c(t)$. \par
+Similarly, the solution $Y(t)$ to the homogeneous equation is sometimes called the \bf{particular solution} and is denoted by $y_p(t)$. Thus, the general solution to a homogeneous equation may also be expressed as
+\[ y(t) = y_c(t) + y_p(t) \]
+We have already explored how to find the complementary solution, so we will now focus on finding the particular solution. 
+\subsubsection{Undetermined Coefficients}
+The method of undetermined coefficients is one way to find the particular solution to a nonhomogeneous differential equation. It requires us to make an assumption about $Y(t)$, but leaves the coefficients left unspecified. \par
+For example, if we have a forcing term in the form of $g(t) = ae^{bt}$, we might make the guess that $Y$ will be something of the form
+\[ Y(t) = Ce^{bt} \]
+where $C$ is a coefficient yet to be determined. We make this guess because of how the exponential function acts under differentiation. 
+\begin{example}
+    Find a particular solution of
+    \[ y'' - 3y' - 4y = 3e^{2t} \]
+    \bf{Solution:} We will use the guess we previously stated--that $Y$ can be described by 
+    \[ Y(t) = Ce^{2t} \]
+    This means that
+    \[ Y'(t) = 2Ce^{2t} \quad \text{and}\quad Y''(t) = 4Ce^{2t} \]
+    These can be substituted back into the differential equation to obtain
+    \[ 4Ce^{2t} - 6Ce^{2t} - 4Ce^{2t} = 3e^{2t} \]
+    which simplifies to $-6C = 3$, or $C = -1/2$. Therefore, a particular solution is
+    \[ Y(t) = -\frac{1}{2}e^{2t} \]
+    if our guess for $Y$ had been incorrect, we would get an equation that is impossible to solve for all $t$. For instance, if we guess that $Y = Ct^2$, we get $Y' = 2Ct$ and $Y'' = 2C$. Substituting this into the differential equation, we get
+    \[ Ct^2 - 6Ct - 8C = 3e^{2t} \]
+    there is no $C$ value that we can choose to solve this equation for every $t\in \RR$, so it follows that $Cx^2$ is not a valid form for a particular solution.
+\end{example}
+\begin{example}
+    Find a particular solution of
+    \[ y'' - 3y' - 4y = 2\sin t\]
+    \bf{Solution:} Because of how trigonometric functions act under differentiation, we will guess that $Y(t) = C\sin t$. This gives us
+    \[ -C\sin t - 3C\cos t - 3C\sin t = 2\sin t\]
+    which simplifies to $(5C+2)\sin t + 3C\cos t = 0$. For this to be true for all $t$, it has to be true at  $t=0$ and at $t=\pi/2$. This gives us $5C+2=0$ and $3C = 0$, which is impossible to solve. Thus, our choice of $Y$ is incorrect. \par
+    Another possible choice would be $Y(t) = A\sin t + B\cos t$. Upon substitution and simplification, this gives
+    \[ (2 + 5A - 3B)\sin t + (5B + 3A)\cos t = 0\]
+    this can be split into the system of two equations
+    \[ 2 + 5A - 3B = 0 \]
+    \[ 5B + 3A = 0 \]
+    which are solved by $A = -5/17$ and $B = 3/17$, giving a particular solution of
+    \[ Y(t) = -\frac{5}{17}\sin t + \frac{3}{17}\cos t \]
+\end{example}
+\begin{example}
+    Find a particular solution of
+    \[ y'' - 3y' - 4y = 4t^2 - 1\]
+    \bf{Solution:} We will make the assumption that $Y(t)$ is of the form
+    \[ Y(t) = At^2 + Bt + C \]
+    which gives $Y' = 2At + B$ and $Y'' = 2A$. Substituting these in, we obtain
+    \[ 2A - 6At - 3B - 4At^2 - 4Bt - 4C = 4t^2 - 1\]
+    collecting terms, we get
+    \[ (4+4A)t^2 + (6A + 4B)t + (4C + 3B - 2A - 1) = 0\]
+    which gives $A = -1$, $B = 3/2$, $C = -11/8$, so the particular solution is
+    \[ Y(t) = -t^2 + \frac{3}{2}t - \frac{11}{8} \]
+\end{example}
+The last three examples gave us three options for the method of undetermined coefficients, which we summarize below.
+\begin{enumerate}
+    \item If $g(t) = \alpha e^{\beta t}$, we assume that $Y(t)$ is proportional to $g(t)$, or $Y(t) = Ae^{\beta t}$.
+    \item If $g(t) = \alpha \sin(\beta t)$ or $\alpha\cos(\beta t)$, we say $Y(t)$ is some function of the form $Y(t) = A\sin(\beta t) + B\cos(\beta t)$. 
+    \item If $g(t)$ is a polynomial of degree $n$, then $Y(t)$ is also a polynomial of degree $n$.
+\end{enumerate}
+These will hold if $g(t)$ is a product of any of these possibilities, as illustrated below.
+\begin{example}
+    Find a particular solution of
+    \[ y'' - 3y' - 4y = -8e^t \cos (2t) \]
+    \bf{Solution:} We will make the guess that $Y(t)$ is in the form
+    \[ Y(t) = Ae^{t}\cos(2t) + Be^{t}\sin(2t) \]
+    Differentiating this twice, we obtain
+    \begin{align*}
+        Y'(t) &= -2Ae^t\sin(2t) + Ae^t\cos(2t) + 2Be^t\cos(2t) + Be^t\sin(2t) \\
+        &= (B-2A)e^t\sin(2t) + (A + 2B)e^t\cos(2t) \\
+        Y''(t) &= (B-2A)e^t\sin(2t) + 2(B-2A)e^t\cos(2t) + (A+2B)e^t\cos(2t) - 2(A+2B)\sin(2t) \\
+        &= (-4A-3B)e^t\sin(2t) + (4B-3A)e^t\cos(2t)
+    \end{align*}
+    If we substitute these into the differential equation and simplify, we obtian
+    \[ 10A + 2B = 8 \quad \quad 2A - 10B = 0\]
+    Hence $A = 10/13$ and $B = 2/13$. Therefore, a particular solution is given by
+    \[ Y(t) = \frac{10}{13}e^t\cos(2t) + \frac{2}{13}e^t\sin(2t)\]
+\end{example}
+Now suppose that $g(t)$ is the sum of two terms, $g(t) = g_1(t) + g_2(t)$. Additionally suppose that $Y_1$ and $Y_2$ are solutions of the equations
+\[ ay'' + by' + cy = g_1(t), \quad ay'' + by' + cy = g_2(t) \]
+respectively. Then, $Y_1 + Y_2$ is a solution of
+\[ ay'' + by' + cy = g(t) \]
+This is known as the principle of \bf{superposition}. Similar constructions can be made for cases where $g(t)$ is the sum of any finite number of terms. This essentially allows us to split up some problems into easier sub-components.
+\begin{example}
+    Find a particular solution of
+    \[ y'' - 3y' - 4y = 3e^{2t} + 2\sin t + 4t^2 - 1 - 8e^t\cos(2t) \]
+    \bf{Solution:} We have already found particular solutions to the problems involving each of these terms individually, so we can apply the principle of superposition and take their sum.
+    \[ Y(t) = -\frac{1}{2}e^{2t} + \frac{3}{17}\cos t - \frac{5}{17}\sin t - t^2 + \frac{3}{2}t - \frac{11}{8} + \frac{10}{13}e^t \cos(2t) + \frac{2}{13}e^t\sin(2t) \]
+\end{example}
+The method of undetermined coefficients as we have learned it currently is quite powerful, but there is one large difficulty that we may encounter. The next example illustrates this.
+\begin{example}
+    Find a particular solution of
+    \[ y'' - 3y' - 4y = 2e^{-t} \]
+    \bf{Solution:} We assume the particular solution is of the form $Y(t) = Ae^{-t}$, which gives us
+    \[ Ae^{-t} + 3Ae^{-t} - 4Ae^{-t} = 2e^{-t} \]
+    This simplifies down to $0 = 2e^{-t}$. Clearly, there is no choice for $A$ that will solve this. The reason this happens becomes clear upon solving the homogeneous equation
+    \[ y'' - 3y' - 4y = 0. \]
+    One of the solutions to this equation is $y_1(t) = e^{-t}$, which you may notice is in exactly the same form as we assumed for our particular solution. This means that $Ae^{-t}$ actually solves the corresponding homogeneous equation, and thus cannot solve the nonhomogeneous version. \par
+    If we wish to resolve this issue, we must consider a slightly different form for our solution. In this case, we will look for something of the form $Y(t) = Ate^{-t}$. This gives
+    \[ Y'(t) = (A-At)e^{-t} \quad \quad Y''(t) = -Ae^{-t} + (At-A)e^{-t}\]
+    which, upon substituting into the differential equation, gives
+    \begin{align*}
+        \bqty{-Ae^{-t} + (At-A)e^{-t}} &- 3\bqty{(A-At)e^{-t}} - 4\bqty{Ate^{-t}} - 2e^{-t} \\
+        &= \pqty{-5A - 2}e^{-t} + \pqty{0}te^{-t} = 0
+    \end{align*}
+    Which is solved when $A = -2/5$, giving a particular solution of
+    \[ Y(t) = -\frac{2}{5}te^{-t} \]
+\end{example}
+This example illustrates another powerful tool that helps when using undetermined coefficients. If our assumed form for $Y(t)$ is already included within the solution to the corresponding homogeneous equation, then we can hope to modify the solution by multiplying it by $t$. In some cases, this will not remove all of the dependence, in which case we will have to multiply by $t^2$. For higher order equations, it may be necessary to multiply by a power of $t$ higher than $2$. 
+\subsection{Variation of Parameters}
+Variation of parameters is another method for finding a particular soltion to nonhomogeneous equations. 
+\begin{example}
+    Find the general solution to
+    \[ y'' + 4y = 8\tan(t) \]
+    with $-\pi/2<t<\pi/2$. \par
+    \bf{Solution:} This problem is not a good candidate for undetermined coefficients because $\tan t$ is not able to be written as a sum or product of $\sin(t)$ and $\cos t$. We will need a different approach. We will begin, as usual, by finding the general solution to the homogeneous equation $y'' + 4y = 0$. This can be quite easily found to be
+    \[ y_h(t) = c_1\cos(2t) + c_2\sin(2t) \]
+    The method of variation of parameters attempts to find a particular solution of the form
+    \[ y_p(t) = u_1(t)\cos(2t) + u_2(t)\sin(2t) \]
+    Where $c_1$ and $c_2$ are replaced by functions $u_1(t)$ and $u_2(t)$ to be determined. To do this, we will differentiate $y_p$ twice and put it back into the original equation. Computing the first derivative, we find
+    \[ y_p''(t) = u_1'(t)\cos(2t) - 2u_1(t)\sin(2t) + u_2'(t)\sin(2t) + 2u_2(t)\cos(2t) \]
+    This will be an algebraic nightmare so we will impose a second condition on $u_1$ and $u_2$ to make this simpler. Because there are many possibile functions $u_1$ and $u_2$ that can construct $y_p$, we are able to add a second condition to narrow us down to one set of $u_1$ and $u_2$. We will choose the condition
+    \begin{equation} \label{restr}
+        u_1'(t)\cos(2t) + u_2'(t)\sin(2t) = 0
+    \end{equation}
+    This allows us to simplify $y_p'(t)$ so that
+    \[ y_p'(t) = 2u_2(t)\cos(2t) - 2u_1(t)\sin(2t) \]
+    We can now differentiate this again to find
+    \[ y_p''(t) = 2u_2'(t)\cos(2t) - 4u_2(t)\sin(2t) - 2u_1'(t)\sin(2t) - 4u_1(t)\cos(2t) \]
+    Substituting this into the differential equation, we get
+    \begin{align*}
+        y_p'' + 4y_p &= (2u_2'(t)\cos(2t) - 4u_2(t)\sin(2t) - 2u_1'(t)\sin(2t) - 4u_1(t)\cos(2t)) \\
+        &\quad\quad + 4(u_1(t)\cos(2t) + u_2(t)\sin(2t)) = 8\tan t
+    \end{align*}
+    This simplifies to
+    \begin{equation} \label{restr2}
+        u_2'(t)\cos(2t) - u_1'(t)\sin(2t) = 4\tan t
+    \end{equation}
+    This gives us a system of two equations that may be able to be solved for $u_1$ and $u_2$--namely, they must satisfy both Equation \ref{restr} and Equation \ref{restr2}. Solving Equation \ref{restr} for $u_2'(t)$, we find
+    \[ u_2'(t) = -u_1'(t) \frac{\cos(2t)}{\sin(2t)} \]
+    and then plugging this into Equation \ref{restr2}, we get
+    \[ -u_1'(t) \frac{\cos^2(2t)}{\sin(2t)} - u_1'(t)\sin(2t) = 4\tan t\]
+    which simplifies to
+    \[ u_1'(t) = -8\sin^2(t) = 4\cos(2t)-4 \]
+    and then 
+    \[ u_2'(t) = \frac{8\sin^2 t\cos(2t)}{\sin(2t)} = 8\sin(t)\cos(t) - 4\tan t\]
+    we can then integrate both of these to find $u_1$ and $u_2$, giving us
+    \[ u_1(t) = 2\sin(2x)-4t+c_1\]
+    and
+    \[ u_2(t) =4\sin^2t + 4\ln\abs{\cos t} + c_2\]
+    Therefore, the general solution is
+    \[ y(t) = (2\sin(2x)-4t+c_1)\cos(2t) + (4\sin^2t + 4\ln\abs{\cos t} + c_2)\sin(2t)\]
+    Notice that the homogeneous solution is already included within the particular solution so the particular solution is the general solution.
+\end{example}
+Now, we will attempt to generalize this. Consider the equation
+\[ y'' + p(t)y' + q(t)y = g(t) \]
+and let $y_h(t) = c_1y_1(t) + c_2y_2(t)$ be the general solution of the homogeneous equation
+\[ y'' + p(t)y' + q(t)y = 0 \]
+If we replace $c_1$ and $c_2$ with functions $u_1(t)$ and $u_2(t)$, we get
+\[ y(t) = u_1(t)y_1(t) + u_2(t)y_2(t) \]
+Differentating this, we obtain
+\[ y'(t) = u_1'(t)y_1(t) + u_1(t)y_1'(t) + u_2'(t)y_2(t) + u_2(t)y_2'(t) \]
+and by making the assumption that $u_1'(t)y_1(t) + u_2'(t)y_2(t) = 0$, we get
+\[ y'(t) = u_1(t)y_1'(t) + u_2(t)y_2'(t) \]
+and then
+\[ y''(t) = u_1'(t)y_1'(t) + u_1(t)y_1''(t) + u_2'(t)y_2'(t) + u_2(t)y_2''(t) \]
+By plugging the expressions for $y''$, $y'$ and $y$ into the differential equation, we find that
+\begin{align*}
+    & u_1'(t)y_1'(t) + u_1(t)y_1''(t) + u_2'(t)y_2'(t) + u_2(t)y_2''(t) \\
+    &+ p(t)(u_1(t)y_1'(t) + u_2(t)y_2'(t)) \\
+    &+ q(t)(u_1(t)y_1(t) + u_2(t)y_2(t)) = g(t)
+\end{align*}
+Which can be rearranged into
+\begin{align*}
+    & u_1(t)(y_1''(t) + p(t)y_1'(t) + q(t)y_1(t)) \\
+    &+ u_2(t)(y_2''(t) + p(t)y_2'(t) + q(t)y_2(t)) \\
+    &+ u_1'(t)y_1'(t) + u_2'(t)y_2'(t) = g(t)
+\end{align*}
+Both of the first two lines cancel to zero because of the fact that $y_1$ and $y_2$ solve the homogeneous equation $y'' + p(t)y' + q(t)y = 0$. Then, we have
+\[ u_1'(t)y_1'(t) + u_2'(t)y_2'(t) = g(t) \]
+and, from before,
+\[ u_1'(t)y_1(t) + u_2'(t)y_2(t) = 0 \]
+These two equations can be solved simultaneously to obtain 
+\[ u_1(t) = -\int \frac{g(t)y_2(t)}{W[y_1, y_2](t)}\dd t \quad \text{and}\quad u_2(t) = \int \frac{g(t)y_1(t)}{W[y_1, y_2](t)}\dd t\]
+Division by the Wronskian is permissible because $y_1$ and $y_2$ form a fundamental set, so it is never zero. Therefore, the particular solution is
+\[ Y(t) = -y_1(t)\int_{t_0}^t \frac{g(\tau )y_2(\tau)}{W[y_1, y_2](\tau)}\dd \tau + y_2(t)\int_{t_0}^t \frac{g(\tau )y_1(\tau)}{W[y_1, y_2](\tau)}\dd \tau \]
+and the general solution is
+\[ y(t) = c_1y_1(t) + c_2y_2(t) + Y(t) \]
+\subsection{Mechanical and Electrical Vibrators}
+One of the most common types of physical process is oscillation. In general, the behavior of an oscillating system is described by the initial value problem
+\[ ay'' + by' + cy = g(t) \quad y(0) = y_0 \quad y'(0) = y_0' \]
+We have already learned how to solve these types of equations--now, we will learn how to apply these models to physical phenomena. \par
+Consider a mass $m$ hanging at rest at the end of a spring with unstretched length $\ell$. The gravitational force $F_g = mg$ on the mass causes it to stretch slightly, so the mass finds equilibrium at an elongation $L$. Hooke's law tells us that the force of the spring is proportional to its elongation. At the equilibrium, the elongation is $L$ so $F_s = -kL$. Therefore, we have
+\[ mg - kL = 0 \]
+Since the net force must be zero for the object to be in equilibrium. \par
+Now, let's consider the dynamics of this problem when the mass is oscillating. By Newton's second law, we have
+\[ my''(t) = f(y'(t), y(t), t) \]
+where $y$ is the position of the mass and $f(y'(t), y(t), t)$ is the net force on the mass. There are four forces we have to take into account:
+\begin{enumerate}
+    \item The gravitational force, which we already covered, is constant and given by $F_g = mg$. Note that this defines downwards as the positive direction. This is completely allowed even though it goes against what our intuition may be. 
+    \item The spring force is assumed to follow Hooke's Law--that is, it is proportional to the total elongation $L+y$ and it acts in the opposite direction as $L+y$--if $L+y$ is positive, the spring is hanging down below equilibrium and so the spring force attempts to pull the mass up, and vice versa. Thus,
+    \[F_s(t) = -k(L+y(t)) \]
+    \item A damping or resistive force $F_d$ acts in the direction opposite the motion of the mass. This damping force could represent air resistance, friction between the mass and some other object, internal energy losses in the spring, a device to slow the mass down, or perhaps all of these simultaneously. We will consider the case where the damping force is proportional to the speed of the mass--this is known as viscous damping, and gives a force described by
+    \[ F_d(t) = -\gamma y'(t) \]
+    \item An external force that is independent of the motion of the mass $F(t)$ may also be applied. This could represent a force due to the motion of the mount that the spring is on or a force on the mass itself. Often, this force is periodic. 
+\end{enumerate}
+Combining all of these, Newton's Second Law states
+\[ my''(t) = mg - k(L+y(t)) - \gamma y'(t) + F(t) \]
+or 
+\[ my''(t) + \gamma y'(t) + ky(t) = F(t) + mg - kL \]
+We know from earlier that $mg-kL = 0$, so this reduces to
+\[ my''(t) + \gamma y'(t) + ky(t) = F(t) \] 
+where $m$, $\gamma$, and $k$ are positive constants. If we prescribe initial conditions $y(t_0) = y_0$ and $y'(t_0) = v_0$ then we can get a complete description of the motion of the spring using the methods we have already explored for solving second order linear equations with constant coefficients. 
+\subsubsection{Undamped Free Oscillations}
+Now, let's consider the ideal case where $F(t) = 0$ and $\gamma = 0$. So the differential equation reduces to
+\[ my''(t) + ky(t) = 0 \]
+which has a characteristic equation $mr^2 + k = 0$ and roots $\pm i\sqrt{k/m}$. Therefore, the general solution is
+\[ y(t) = c_1\sin(\omega_0 t) + c_2\cos(\omega_0 t)\]
+where $\omega_0 = \sqrt{k/m}$ is called the natural frequency of the vibration. Oftentimes it is convenient to write this in the form
+\[ y(t) = A\cos(\varphi)\cos(\omega_0 t) + A\sin(\varphi)\sin(\omega_0 t)\] 
+where $A = \sqrt{c_1^2+c_2^2}$ and $\tan(\varphi) = c_2/c_1$. This allows us to use trigonometric identities to write
+\[ y(t) = A\cos(\omega_0 t - \varphi) \]
+which allows us to describe the motion in terms of an amplitude and a phase angle. These constants are much easier to determine experimentally than $c_1$ and $c_2$. \par
+From this equation, we can determine that the period $T$ of the motion is given by $w_0T = 2\pi$ or 
+\[ T = \frac{2\pi}{\omega_0} = 2\pi \sqrt{\frac{m}{k}} \]
+\begin{example}
+    Suppose a mass weighing $10$ pounds stretches a spring by $1/6$ of a foot. The mass is displaced an additional $1/6$ of a foot and is then given an initial velocity of $1$ foot per second upwards. Find an expression for the displacement of the spring as a function of time and find the period of the oscillation. \par
+    We can find the mass with $m = w/g = 10/32$ and the spring constant with $k = mg/L = 10/(1/6) = 60$. Therefore the governing differential equation is given by
+    \[ \frac{5}{16}y'' + 60y = 0\quad\text{or}\quad y'' + 192y = 0\]
+    The general solution to this is
+    \[ y(t) = c_1 \cos(3\sqrt{8} t) + c_2\sin(3\sqrt{8} t) \]
+    and the initial conditions are $y(0) = 1/3$ and $y'(0) = -1$. Therefore, we have
+    \[ y(t) = \frac{1}{3}\cos(8\sqrt{3}t) - \frac{1}{8\sqrt{3}}\sin(8\sqrt{3} t) \]
+    alternatively, we can express $y$ in terms of the amplitude and phase angle. First, the amplitude is given by $A = \sqrt{c_1^2+c_2^2} = 19/576 \approx 0.182$. Similarly, the phase is given by $\varphi = - \arctan({\sqrt 3/4}) = -0.409$ radians. The minus sign comes from the fact that we $\varphi$ is in the fourth quadrant (because $\sin \varphi < 0$ and $\cos\varphi > 0$ based on the equations $c_1 = A\cos\varphi$ and $c_2 = A\sin\varphi$). Therefore, we also have
+    \[ y(t) = 0.182\cos(8\sqrt 3 t + 0.409) \]
+\end{example}
+\subsubsection{Damped Free Oscillations}
+Now, we consider the case where $F(t)$ is still zero but now there is a nonzero amount of damping, so the differential equation is
+\[ my''(t) + \gamma y'(t) + ky(t) = 0 \]
+This has the characteristic equation $mr^2 + \gamma r + k = 0$. The roots of this equation are given by
+\[ r_1, r_2 = \frac{-\gamma \pm \sqrt{\gamma ^2 - 4km}}{2m} \]
+depending on the sign of $\gamma^2-4km$, the solution will be in one of the following forms:
+\begin{align*}
+    \gamma^2-4km > 0&, \quad y(t) = Ae^{r_1t} + Be^{r_2 t} \\
+    \gamma^2-4km = 0&,\quad y(t) = Ae^{rt} + Bte^{rt} \\
+    \gamma^2-4km < 0&,\quad y(t) = Ae^{\alpha t}\cos(\beta t) + Be^{\alpha t}\sin(\beta t)
+\end{align*}
+In the case where we have two distinct real roots, we can guarantee that both roots are negative. This comes from the fact that $\gamma$, $k$, and $m$ are all positive. Therefore, $\gamma^2 - 4km < \gamma^2$ (they cannot be equal because that would require $m=0$ or $k=0$, which we cannot have). This implies $-\gamma \pm \sqrt{\gamma^2 - 4km} < -\gamma \pm \gamma \leq 0$. \par
+When there is one repeated real root, we can guarantee it is negative because $r = -\gamma/(2m)$ and $\gamma$ and $m$ are positive. \par
+When there are two complex roots, we will also be able to guarantee that the real parts of the roots are negative. This is because the real part is given by $\alpha = -\gamma/(2m)$. Since $\gamma$ and $m$ are positive, $\alpha$ is negative. \par
+Due to these three facts, the exponential term present in every solution will cause them to decay to zero as $t\to\infty$. This makes sense with our intuition--a damped spring should continually slow down as time goes on. \par
+The distinct real roots case and repeated real roots case cause the solution to be a decreasing exponential, and the complex roots case causes the solution to oscillate with decreasing magnitude. This also makes sense with our intuition--the roots are real if the amount of damping is large a nd the roots are complex if the amount of damping is small. Therefore, it is understandable that real roots correspond to the function being unable to oscillate due to its energy dissipating too quickly. \par
+With the same process that we used in the previous section, we can write the solution in the complex roots case as
+\[ y(t) = Ae^{-\gamma t/(2m)}\cos(\mu t - \varphi) \]
+Notice that we used $\mu$ instead of $\omega_0$ because the frequency of our oscillation is \textit{not} the natural frequency. Instead, the oscillation is slowed down by the presence of damping, so we call $\mu$ the quasi-frequency. The graph of this will look like a sine wave that is bounded above and below by $\pm e^{-\gamma t/(2m)}$. \par
+\picture{0.5\textwidth}{damped.png} \par
+This photo uses $R$ and $\delta$ instead of $A$ and $\varphi$ because I blatantly stole it from the textbook which uses different symbols. \par
+It will also be useful to examine the ratio $\mu/\omega_0$. 
+\[ \frac{\mu}{\omega_0} = \frac{\sqrt{4km-\gamma^2}/(2m)}{\sqrt{k/m}} = \sqrt{1-\frac{\gamma^2}{4km}} \approx 1 - \frac{\gamma^2}{8km} \]
+Thus it can be understood that damping will slightly reduce the frequency of the oscillation. Similarly, the quantity $T_d = 2\pi/\mu$ is called the quasi-period. The relationship $T_d/T$ is given by
+\[ \frac{T_d}{T} = \frac{\omega_0}{\mu} = \pqty{1-\frac{\gamma^2}{4km}}^{-1/2} \approx 1 + \frac{\gamma^2}{8km} \]
+thus it can be understood that damping will slightly increase the period. Another consequence of these equations is that the quasi-frequency and quasi-period are not determined solely by the damping, but rather by the relationship between the damping and the mass and spring constant. Specifically, if the mass or spring constant is large, it will take a larger damping coefficient to reduce the period and frequency by some given amount. \par
+As $\gamma \to 2\sqrt{km}$, we find that $\mu\to 0$ and $T_d \to \infty$. \par 
+When $\gamma = 2\sqrt{km}$, the differential equation will have one repeated root. In this case, we say that the motion is \textbf{critically damped}. \par
+When $\gamma > 2\sqrt{km}$, the differential equation has two distinct real roots and the motion is \textbf{overdamped}. \par
+When the oscillation is overdamped or critically damped, it can pass through the equilibrium point $y=0$ at most once before creeping back to it and continually approaching it. \par
+When $\gamma < 2\sqrt{km}$ we have two complex roots and we call the motion \bf{underdamped}. This type of motion may oscillate many times back and forth, depending on how small $\gamma$ is.  
+\subsubsection{Electric Circuits}
+A similar situation arises when considering electric circuits with one resistor, capacitor, and inductor. The governing differential equation is determined by Kirchoff's loop rule and states
+\[ LQ'' + RQ' + \frac{1}{C}Q = E(t) \]
+where $Q$ is the charge on the capacitor and $L, R, C$ are positive constants describing the inductance of the inductor, the resistance of the resistor, and the capacitance of the capacitor. $E(t)$ is a function describing the input voltage (i.e. from a battery) at a certain time $t$. \par
+If we prescribe some initial conditions $Q(t_0) = Q_0$ and $Q'(t_0) = I_0$, we can use the methods of solving nonhomogeneous second order linear equations to find an expression for the charge on the capacitor as a function of time. \par
+We can turn this into an equation describing the current as a function of time by differentiating both sides to get
+\[ LI'' + RI' + \frac{1}{C}I = E'(t) \]
+and assigning new initial conditions $I(t_0) = I_0$ and $I'(t_0) = I_0'$. Much of the same analysis can be done here as we did with spring oscillation systems, but we will skip that here as it is pretty much the same process.
+\subsubsection{Forcd Periodic Vibrations}
+Now, consider the case when a periodic external force is applied to a spring-mass system. First, we will consider the case with damping. \par
+The differential equation describing this behavior is given by
+\[ my''(t) + \gamma y'(t) + ky(t) = F_0\cos(\omega t) \]
+Where $m$, $\gamma$, $k$, $F_0$, and $\omega$ are positive constants. The physical interpretation of $m$, $\gamma$, and $k$ are the same as before, while $F_0$ is the amplitude of force function and $\omega$ is the frequency of the force function. The general solution of this has the form
+\[ y(t) = c_1y_1(t) + c_2y_2(t) + \alpha \cos(\omega t) + \beta \sin(\omega t) = y_h(t) + y_p(t) \]
+$y_h(t)$ is the general solution to the homogeneous equation. Earlier, we found that this solution always decreases in amplitude to zero as $t\to\infty$. We call this term the \textbf{transient solution}. $y_p(t)$, on the other hand, will persist and oscillate indefinitely. Thus as $t\to\infty$, $y(t) \to y_p(t)$. We call $y_h(t)$ the \textbf{steady-state solution} or \textbf{forced response} of the system. Since the transient solution decays, many applications ignore it because its value is negligible after a few seconds. \par
+We often express $y_p(t)$ as a single trigonometric term $y_p(t) = A\cos(\omega t - \varphi)$ using the same process as earlier. 
+\end{document}
